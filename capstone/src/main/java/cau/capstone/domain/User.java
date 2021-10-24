@@ -1,35 +1,45 @@
 package cau.capstone.domain;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-@Builder
-@Data
+@ToString
+
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
+
 public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false) // 제약조건이 걸린다
+  @Column(nullable = false, unique = true)
   private String email;
 
   @Column(length = 20, nullable = false)
-  private String username;
+  private String name;
 
   @Column(nullable = false)
   private String password;
 
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private Role role;
 
+//  private String provider;
+//  private String providerId;
+
+  @Builder
+  public User(String email, String name, String password, Role role) {
+    this.email = email;
+    this.name = name;
+    this.password = password;
+    this.role = role;
+  }
 
   // 회원, 비회원
   // 관리자

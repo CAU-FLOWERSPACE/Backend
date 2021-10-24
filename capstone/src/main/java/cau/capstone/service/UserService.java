@@ -1,28 +1,33 @@
 package cau.capstone.service;
 
 import cau.capstone.domain.User;
+import cau.capstone.dto.auth.JoinRequest;
 import cau.capstone.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
+  private final PasswordEncoder passwordEncoder;
+
   private final UserRepository userRepository;
-  private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+  /***
+   * 회원가입 서비스
+   */
 
   @Transactional
-  public User 회원가입(User user) {
+  public Long join(JoinRequest joinRequest) {
 
-    String rawPassword = user.getPassword();
-    String encPassword = bCryptPasswordEncoder.encode(rawPassword);
-    user.setPassword(encPassword);
+    joinRequest.setPassword(passwordEncoder.encode(joinRequest.getPassword()));
+    User userEntity = joinRequest.toEntity();
 
-    User userEntity = userRepository.save(user);
-    return userEntity;
+    return userRepository.save(userEntity).getId();
 
   }
 }
