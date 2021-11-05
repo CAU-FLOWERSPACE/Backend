@@ -4,10 +4,12 @@ import cau.capstone.domain.User;
 import cau.capstone.dto.auth.JoinRequest;
 import cau.capstone.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
@@ -29,5 +31,11 @@ public class UserService {
 
     return userRepository.save(userEntity).getId();
 
+  }
+
+  @Transactional
+  public boolean checkEmail(String email) {
+    log.info("check duplicate email service");
+    return userRepository.existsByEmail(email);
   }
 }
