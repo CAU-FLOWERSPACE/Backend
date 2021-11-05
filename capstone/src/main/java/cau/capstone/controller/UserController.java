@@ -8,15 +8,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @Slf4j
-@CrossOrigin(origins = "http://localhost:3002") //해당 리액트 포트 번호. // 이거 뭔지 확인해보기
 @RequiredArgsConstructor
 @RestController
 public class UserController {
@@ -28,10 +24,23 @@ public class UserController {
   @PostMapping("/api/join")
   public ResponseEntity<JoinResponse> join(@Valid @RequestBody JoinRequest joinRequest) {
 
-    log.info("회원가입 요청 완료 !!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    log.info("회원가입 요청 완료");
 
     Long saveId = userService.join(joinRequest);
     return new ResponseEntity<>(new JoinResponse(saveId), HttpStatus.CREATED);
 
   }
+
+  // 이메일 중복체크
+  @GetMapping("/api/user/check/email/{email}")
+  public ResponseEntity<?> checkEmail(@PathVariable("email") String email) {
+    log.info("Controller :: check duplicate email");
+
+    if (userService.checkEmail(email)) {
+      return ResponseEntity.status(HttpStatus.OK).body(false);
+    }
+
+    return ResponseEntity.status(HttpStatus.OK).body(true);
+  }
+
 }
