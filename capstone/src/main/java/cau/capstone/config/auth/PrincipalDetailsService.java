@@ -18,12 +18,21 @@ public class PrincipalDetailsService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    log.info("[request login] " + email);
+    log.info(String.format("[loadUserByUsername]: request_email -> %s", email));
     User userEntity = userRepository.findByEmail(email);
 
-    if (userEntity != null) {
-      return new PrincipalDetails(userEntity);
+    if(userEntity == null) {
+      throw new UsernameNotFoundException(String.format("회원이 존재하지 않습니다 -> " + email));
     }
-    throw new UsernameNotFoundException("존재하지 않는 회원입니다.");
+
+    return new PrincipalDetails(userEntity);
   }
 }
+
+//
+//  @Override
+//  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+//    Optional< UserEntity > user= userRepository.findByEmail(email);
+//    user.orElseThrow(()-> new UsernameNotFoundException("Not found: " + email));
+//    return user.map(UserInfo::new).get();
+//  }

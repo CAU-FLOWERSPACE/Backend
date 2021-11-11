@@ -2,12 +2,12 @@ package cau.capstone.domain;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Builder
-@Data
+@Getter
 @NoArgsConstructor
 @Entity
 public class Flower {
@@ -28,9 +28,18 @@ public class Flower {
   @Column(nullable = false)
   private String color;
 
-  @Column(nullable = false)
-  private Long rgb; // 수정필요
+  @Column(nullable = true)
+  private String image;
 
-  // 이미지
+//  @Column(nullable = false)
+//  private Long rgb; // 수정필요
 
+  @Builder
+  public Flower(String flower_name, String mean, String flower_feature, String color, String image) {
+    this.flower_name = flower_name;
+    this.mean = mean;
+    this.flower_feature = flower_feature;
+    this.color = color;
+    this.image = image;
+  }
 }

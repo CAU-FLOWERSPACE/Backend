@@ -47,7 +47,6 @@ class UserServiceTest {
     String name = "test_name";
     String password = "test_password";
 
-
     //given
     JoinRequest joinRequest = JoinRequest.builder()
       .email(email)
@@ -63,6 +62,7 @@ class UserServiceTest {
     assertThat(all.get(0).getEmail()).isEqualTo(email);
     assertThat((passwordEncoder.matches(password, all.get(0).getPassword()))).isTrue();
     assertThat(all.get(0).getName()).isEqualTo(name);
+
   }
 
 //  void 회원가입실패() {
