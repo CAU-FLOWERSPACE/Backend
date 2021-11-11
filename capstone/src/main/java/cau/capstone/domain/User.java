@@ -41,6 +41,10 @@ public class User {
     this.role = role;
   }
 
+  public String getEmail() {
+    return this.email;
+  }
+
   // 회원, 비회원
   // 관리자
 
